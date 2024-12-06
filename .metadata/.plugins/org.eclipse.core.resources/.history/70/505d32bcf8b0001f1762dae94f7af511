@@ -1,0 +1,12 @@
+package com.example.CEA;
+
+import org.springframework.stereotype.Service;
+
+
+@Service
+public class CurrencyExchangeService {
+	public CurrencyExchangeService() {}
+	
+	public String L() {return"Hello";}
+
+}

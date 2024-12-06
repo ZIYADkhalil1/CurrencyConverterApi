@@ -1,0 +1,56 @@
+package com.example.CEA;
+
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+@Service
+public class CurrencyExchangeService {
+
+	
+    @Bean
+    public RestTemplate restTemplate() {
+        return new RestTemplate();
+    }
+	@Autowired
+	public ObjectMapper objectMapper;
+	@Autowired
+	public RestTemplate restTemplate;
+	
+	public  Map<String, Double> fetchCurrencyRatesJsonFile(String currencyName, String url) throws JsonMappingException, JsonProcessingException{
+		Map<String, Double> currencyRates = new HashMap<>();
+        String response = restTemplate.getForObject(url, String.class);
+        JsonNode rootNode = objectMapper.readTree(response);
+		try {
+			rootNode = objectMapper.readTree(response);
+		} catch (JsonMappingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (JsonProcessingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+        // Iterate through the fields in the JSON
+        Iterator<Map.Entry<String, JsonNode>> fields = rootNode.fields();
+        while (fields.hasNext()) {
+            Map.Entry<String, JsonNode> field = fields.next();
+
+            String currencyKey = field.getKey(); // Use the key (e.g., "usd", "eur") as the map key
+            double rate = field.getValue().get("rate").asDouble(); // Get the "rate" value
+
+            currencyRates.put(currencyKey, rate);
+        }
+	return currencyRates;
+	}
+}

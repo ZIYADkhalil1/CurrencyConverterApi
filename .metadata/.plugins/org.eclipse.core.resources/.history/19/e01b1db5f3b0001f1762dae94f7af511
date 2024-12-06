@@ -1,0 +1,13 @@
+package com.example.CEA;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+@Service
+public class CurrencyExchangeService {
+
+	@Autowired
+	public ObjectMapper objectMapper;
+}

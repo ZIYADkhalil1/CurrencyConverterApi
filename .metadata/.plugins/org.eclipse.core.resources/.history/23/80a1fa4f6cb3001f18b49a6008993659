@@ -1,0 +1,38 @@
+package com.example.CEA;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.stereotype.Service;
+
+import com.fasterxml.jackson.core.exc.StreamReadException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.DatabindException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+@Service
+public class CurrencyExchangeService {
+	
+	
+
+    public Double json(String curCode) throws IOException, StreamReadException, DatabindException, java.io.IOException {
+    		
+    	String path = "D:/currencyExchangeApi/data.json";
+    	File file = new File(path);
+		ObjectMapper mapper = new ObjectMapper();
+	    Map<String, Object> root = mapper.readValue(file, new TypeReference<Map<String, Object>>() {});
+	    Map<String, Object> curDetails = (Map<String, Object>) root.get(curCode);
+	    Double rate = (Double) curDetails.get("rate");
+	    
+		return rate;
+    	
+    }
+//    public Integer rate(String cur) {
+//    	
+//    	
+//    }
+    
+    
+}

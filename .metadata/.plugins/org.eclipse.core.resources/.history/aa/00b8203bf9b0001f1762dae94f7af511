@@ -1,0 +1,45 @@
+package com.example.CEA;
+
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.HashMap;
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+@Service
+public class CurrencyExchangeService {
+
+    public Map<String, Map<String, Object>> currencyMap;
+
+
+
+    // Load JSON into HashMap at startup
+    private void loadCurrencies(ObjectMapper objectMapper) {
+        try (InputStream inputStream = getClass().getResourceAsStream("D:/currencyExchangeApi/data.json")) {
+            if (inputStream == null) {
+                throw new IllegalArgumentException("File not found");
+            }
+
+            // Convert JSON to HashMap
+            TypeReference<HashMap<String, Map<String, Object>>> typeRef = new TypeReference<>() {};
+            this.currencyMap.putAll(objectMapper.readValue(inputStream, typeRef));
+        } catch (IOException e) {
+            throw new RuntimeException("Error reading JSON file", e);
+        }
+    }
+
+    // Get the rate for a given currency key
+    public static Double getRateByKey(String key) {
+        Map<String, Object> currencyData = currencyMap.get(key.toLowerCase()); // Case-insensitive lookup
+        if (currencyData != null && currencyData.containsKey("rate")) {
+            return Double.parseDouble(currencyData.get("rate").toString());
+        }
+        throw new IllegalArgumentException("Key not found or rate unavailable");
+    }
+}

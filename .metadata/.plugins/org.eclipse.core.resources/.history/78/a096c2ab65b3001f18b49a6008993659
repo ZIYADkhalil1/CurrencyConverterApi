@@ -1,0 +1,30 @@
+package com.example.CEA;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.Map;
+
+import org.springframework.stereotype.Service;
+
+import com.fasterxml.jackson.core.exc.StreamReadException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.DatabindException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+@Service
+public class CurrencyExchangeService {
+
+
+    public Map<String, Object> json() throws IOException, StreamReadException, DatabindException, java.io.IOException {
+    		
+    	String path = "D:/currencyExchangeApi/data.json";
+    	File file = new File(path);
+		ObjectMapper mapper = new ObjectMapper();
+	    Map<String, Object> root = mapper.readValue(file, new TypeReference<Map<String, Object>>() {});
+	    return root;
+    	
+    }
+    
+    
+    
+}

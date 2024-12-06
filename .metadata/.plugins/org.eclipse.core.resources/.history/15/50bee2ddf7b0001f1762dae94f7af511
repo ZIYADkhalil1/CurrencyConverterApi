@@ -1,0 +1,18 @@
+package com.example.CEA;
+
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+
+
+@RestController
+public class Controller {
+
+	public CurrencyExchangeService currencyExchangeService;
+	@GetMapping("/test")
+	public Double x(@RequestParam String key) {
+		return currencyExchangeService.getRateByKey(key);
+	}
+	
+}
